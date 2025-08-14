@@ -47,10 +47,18 @@ def setup():
 def create_api_app():
     app = Flask(__name__)
 
-    # --- FIX: Call setup() here ---
     # This ensures the database is created when the app starts in any environment.
     with app.app_context():
         setup()
+
+    # --- NEW: Add a root route for testing ---
+    @app.route('/', methods=['GET'])
+    def index():
+        """
+        A simple root endpoint to confirm the API is running.
+        """
+        return jsonify({'message': 'Welcome to the Ticket Validation API!'}), 200
+
 
     @app.route('/validate_ticket/<string:ticket_number>', methods=['GET'])
     def validate_ticket(ticket_number):
